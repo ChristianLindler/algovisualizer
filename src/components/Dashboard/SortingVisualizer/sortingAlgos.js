@@ -110,3 +110,64 @@ export const quickSort = async (
 
   setHighlighted([])
 }
+
+const merge = async (array, left, middle, right, setArray, setHighlighted, timeoutLength) => {
+  const leftSize = middle - left + 1;
+  const rightSize = right - middle;
+
+  const leftArray = [];
+  const rightArray = [];
+
+  for (let i = 0; i < leftSize; i++) {
+    leftArray[i] = array[left + i];
+  }
+
+  for (let i = 0; i < rightSize; i++) {
+    rightArray[i] = array[middle + 1 + i];
+  }
+
+  let i = 0;
+  let j = 0;
+  let k = left;
+
+  while (i < leftSize && j < rightSize) {
+    setHighlighted([left + i, middle + 1 + j]);
+    await new Promise((resolve) => setTimeout(resolve, timeoutLength));
+
+    if (leftArray[i] <= rightArray[j]) {
+      array[k] = leftArray[i];
+      i++;
+    } else {
+      array[k] = rightArray[j];
+      j++;
+    }
+
+    setArray([...array]);
+    await new Promise((resolve) => setTimeout(resolve, timeoutLength));
+    setHighlighted([]);
+    k++;
+  }
+
+  while (i < leftSize) {
+    array[k] = leftArray[i];
+    i++;
+    k++;
+  }
+
+  while (j < rightSize) {
+    array[k] = rightArray[j];
+    j++;
+    k++;
+  }
+};
+
+export const mergeSort = async (array, left, right, setArray, setHighlighted, timeoutLength) => {
+  if (left < right) {
+    const middle = Math.floor((left + right) / 2);
+
+    await mergeSort(array, left, middle, setArray, setHighlighted, timeoutLength);
+    await mergeSort(array, middle + 1, right, setArray, setHighlighted, timeoutLength);
+
+    await merge(array, left, middle, right, setArray, setHighlighted, timeoutLength);
+  }
+};

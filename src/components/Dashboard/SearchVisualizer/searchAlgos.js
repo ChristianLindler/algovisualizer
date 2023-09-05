@@ -60,7 +60,7 @@ export const bfs = async (grid, startCell, endCell, setGrid, timeoutLength) => {
 
 
 
-export const aStar = async (grid, startCell, endCell, setGrid, timeoutLength) => {
+export const aStar = async (grid, startCell, endCell, setGrid, timeoutLength, heuristic) => {
   const customPriorityComparator = (a, b) => a.f - b.f
   const frontier = new Heap(customPriorityComparator)
   const explored = new Set()
@@ -68,7 +68,7 @@ export const aStar = async (grid, startCell, endCell, setGrid, timeoutLength) =>
 
   // Initialize g and f values for the start cell
   startCell.g = 0;
-  startCell.f = manhattanDistance(startCell, endCell);
+  startCell.f = heuristic(startCell, endCell);
   frontier.push(startCell)
 
   while (!frontier.isEmpty()) {
@@ -103,7 +103,7 @@ export const aStar = async (grid, startCell, endCell, setGrid, timeoutLength) =>
         if (!explored.has(neighbor) || tentativeG < neighbor.g) {
           // Update g and f values for the neighbor
           neighbor.g = tentativeG;
-          neighbor.f = tentativeG + manhattanDistance(neighbor, endCell);
+          neighbor.f = tentativeG + heuristic(neighbor, endCell);
           frontier.push(neighbor)
           parents.set(neighbor, currentCell)
         }
@@ -113,6 +113,12 @@ export const aStar = async (grid, startCell, endCell, setGrid, timeoutLength) =>
 }
 
 // manhattan
-const manhattanDistance = (cell, endCell) => {
-  return Math.abs(cell.row - endCell.row) + Math.abs(cell.col - endCell.col);
+export const manhattanDistance = (cell, endCell) => {
+  return Math.abs(cell.row - endCell.row) + Math.abs(cell.col - endCell.col)
+}
+
+
+// manhattan
+export const euclidianDistance = (cell, endCell) => {
+  return Math.sqrt((cell.row - endCell.row)**2 + (cell.col - endCell.col)**2)
 }

@@ -1,4 +1,4 @@
-import { aStar, bfs } from "./searchAlgos"
+import { aStar, bfs, euclidianDistance, manhattanDistance } from "./searchAlgos"
 import { Grid, Paper, makeStyles } from "@material-ui/core"
 import PathGrid from './PathGrid/pathGrid'
 import { useState } from "react"
@@ -47,17 +47,27 @@ const SearchVisualizer = () => {
     const [searchAlgorithm, setSearchAlgorithm] = useState('bfs')
     const [timeoutLength, setTimeoutLength] = useState(0)
     const [isSearching, setIsSearching] = useState(false)
+    const [heuristic, setHeuristic] = useState('manhattan')
 
 
 
     const search = async() => {
+        let heuristicFunction
+        switch(heuristic) {
+
+            case 'manhattan':
+                heuristicFunction = manhattanDistance
+                break
+            case 'euclidian':
+                heuristicFunction = euclidianDistance
+        }
         setIsSearching(true)
         switch(searchAlgorithm) {
             case 'bfs':
                 await bfs(grid, startCell, endCell, setGrid, timeoutLength)
                 break
             case 'a star':
-                await aStar(grid, startCell, endCell, setGrid, timeoutLength)
+                await aStar(grid, startCell, endCell, setGrid, timeoutLength, heuristicFunction)
                 break
             default:
         }
@@ -83,6 +93,8 @@ const SearchVisualizer = () => {
                         setGrid={setGrid}
                         initialGrid={initialGrid}
                         isSearching={isSearching}
+                        heuristic={heuristic}
+                        setHeuristic={setHeuristic}
                     />
                 </Paper>
             </Grid>

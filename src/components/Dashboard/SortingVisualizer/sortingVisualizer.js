@@ -1,7 +1,7 @@
 import { Grid, Paper, makeStyles } from "@material-ui/core"
 import Chart from "./chart"
 import { useState, useEffect } from "react"
-import { bubbleSort, shuffleArray, getArray, insertionSort, quickSort } from './sortingAlgos'
+import { bubbleSort, shuffleArray, getArray, insertionSort, quickSort, mergeSort } from './sortingAlgos'
 import { theme } from "../../../theme"
 import SortingForm from './sortingForm'
 
@@ -48,8 +48,12 @@ const SortingVisualizer = () => {
             case 'Insertion Sort':
                 await insertionSort(heights, setHeights, setHighlighted, timeoutLength)
                 break
-            case 'QuickSort':
+            case 'Quick Sort':
                 await quickSort(heights, 0, heights.length - 1, setHeights, setHighlighted, timeoutLength)
+                break
+            case 'Merge Sort':
+                await mergeSort(heights, 0, heights.length - 1, setHeights, setHighlighted, timeoutLength)
+                break
             default:
         }
         setIsSorting(false)

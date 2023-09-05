@@ -27,7 +27,7 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-const SearchForm = ({algorithm, setAlgorithm, setGrid, initialGrid, search, timeoutLength, setTimeoutLength, isSearching}) => {
+const SearchForm = ({algorithm, setAlgorithm, setGrid, initialGrid, search, timeoutLength, setTimeoutLength, isSearching, heuristic, setHeuristic}) => {
     const classes = useStyles()
 
     const resetGrid = () => {
@@ -42,7 +42,13 @@ const SearchForm = ({algorithm, setAlgorithm, setGrid, initialGrid, search, time
                     <MenuItem value={'a star'}>A Star</MenuItem>
                 </Select>
             </Grid>
-            <Grid item xs={12} className={classes.item}>
+            <Grid item xs={6} className={classes.item}>
+                <Select label='Heuristic' value={heuristic} onChange={(event) => setHeuristic(event.target.value)} className={classes.input}>
+                    <MenuItem value={'manhattan'}>Manhattan Distance</MenuItem>
+                    <MenuItem value={'euclidian'}>Euclidian Distance</MenuItem>
+                </Select>
+            </Grid>
+            <Grid item xs={6} className={classes.item}>
                 <TextField label='Timeout Length' defaultValue={0} value={timeoutLength} onChange={(event) => setTimeoutLength(event.target.value)} fullWidth/>
             </Grid>
             <Grid item xs={6}>

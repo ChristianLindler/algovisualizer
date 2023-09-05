@@ -40,7 +40,8 @@ const SortingForm = ({shuffleHeights, numBars, setNumBars, timeoutLength, setTim
                 <Select label='Algorithm' value={algorithm} onChange={(event) => setAlgorithm(event.target.value)} className={classes.input}>
                     <MenuItem value={'Bubble Sort'}>Bubble Sort</MenuItem>
                     <MenuItem value={'Insertion Sort'}>Insertion Sort</MenuItem>
-                    <MenuItem value={'QuickSort'}>QuickSort</MenuItem>
+                    <MenuItem value={'Quick Sort'}>Quick Sort</MenuItem>
+                    <MenuItem value={'Merge Sort'}>Merge Sort</MenuItem>
                 </Select>
             </Grid>
             <Grid item xs={6}>
