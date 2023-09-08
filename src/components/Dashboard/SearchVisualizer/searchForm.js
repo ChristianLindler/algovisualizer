@@ -4,7 +4,8 @@ import {
     Button,
     makeStyles,
     Select,
-    MenuItem
+    MenuItem,
+    Slider,
 } from '@material-ui/core'
 import { theme } from '../../../theme'
 
@@ -27,35 +28,45 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-const SearchForm = ({algorithm, setAlgorithm, setGrid, initialGrid, search, timeoutLength, setTimeoutLength, isSearching, heuristic, setHeuristic}) => {
+const SearchForm = ({algorithm, setAlgorithm, search, timeoutLength, setTimeoutLength, isSearching, resetAll, resetPath, pathUsed}) => {
     const classes = useStyles()
 
-    const resetGrid = () => {
-        setGrid(initialGrid)
+    const handleSpeedChange = (event, newValue) => {
+        const maxSpeed = 100
+        const minSpeed = 0
+        const scaledTimeout = (maxSpeed - newValue) / (maxSpeed - minSpeed) * 100;
+        setTimeoutLength(scaledTimeout);
     }
 
     return(
         <Grid className={classes.container} container>
-            <Grid item xs={12} className={classes.item}>
+            <Grid item xs={6} className={classes.item}>
                 <Select label='Algorithm' value={algorithm} onChange={(event) => setAlgorithm(event.target.value)} className={classes.input}>
                     <MenuItem value={'bfs'}>BFS</MenuItem>
                     <MenuItem value={'a star'}>A Star</MenuItem>
+                    <MenuItem value={'bidirectional a star'}>Bidirectional A Star</MenuItem>
                 </Select>
             </Grid>
             <Grid item xs={6} className={classes.item}>
-                <Select label='Heuristic' value={heuristic} onChange={(event) => setHeuristic(event.target.value)} className={classes.input}>
-                    <MenuItem value={'manhattan'}>Manhattan Distance</MenuItem>
-                    <MenuItem value={'euclidian'}>Euclidian Distance</MenuItem>
-                </Select>
-            </Grid>
-            <Grid item xs={6} className={classes.item}>
-                <TextField label='Timeout Length' defaultValue={0} value={timeoutLength} onChange={(event) => setTimeoutLength(event.target.value)} fullWidth/>
+                <h4>Speed</h4>
+                <Slider
+                value={100 - timeoutLength}
+                onChange={handleSpeedChange}
+                valueLabelDisplay="auto"
+                aria-labelledby="speed-slider"
+                min={0}
+                max={100}
+                className={classes.slider}
+                />
             </Grid>
             <Grid item xs={6}>
-                <Button onClick={search} className={classes.button} disabled={isSearching}>Search</Button>
+                <Button onClick={() => resetAll()} className={classes.button} disabled={isSearching}>Reset All</Button>
             </Grid>
             <Grid item xs={6}>
-                <Button onClick={() => setGrid(initialGrid)} className={classes.button} disabled={isSearching}>Reset</Button>
+                <Button onClick={() => resetPath()} className={classes.button} disabled={isSearching}>Reset Path</Button>
+            </Grid>
+            <Grid item xs={12}>
+                <Button onClick={search} className={classes.button} disabled={isSearching || pathUsed}>Search</Button>
             </Grid>
         </Grid>
     )

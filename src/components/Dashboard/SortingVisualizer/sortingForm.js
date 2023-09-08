@@ -4,14 +4,15 @@ import {
     Button,
     makeStyles,
     Select,
-    MenuItem
+    MenuItem,
+    Slider
 } from '@material-ui/core'
 import { theme } from '../../../theme'
 
 const numRows = 20 
 const numCols = 50
-const startCell = {row: (numRows - 1)/2, col: 0}
-const endCell = {row: (numRows - 1)/2, col: numCols - 1}
+const startPos = {row: (numRows - 1)/2, col: 0}
+const endPos = {row: (numRows - 1)/2, col: numCols - 1}
 
 const useStyles = makeStyles(() => ({
 	container: {
@@ -23,7 +24,7 @@ const useStyles = makeStyles(() => ({
         margin: 10
     },
     input: {
-        width: '100%'
+        width: '100%',
     },
     button: {
         backgroundColor: theme.colors.secondary.main,
@@ -34,6 +35,14 @@ const useStyles = makeStyles(() => ({
 
 const SortingForm = ({shuffleHeights, numBars, setNumBars, timeoutLength, setTimeoutLength, algorithm, setAlgorithm, sort, isSorting}) => {
     const classes = useStyles()
+
+    const handleSpeedChange = (event, newValue) => {
+        const maxSpeed = 100
+        const minSpeed = 0
+        const scaledTimeout = (maxSpeed - newValue) / (maxSpeed - minSpeed) * 100;
+        setTimeoutLength(scaledTimeout);
+    }
+
     return(
         <Grid className={classes.container} container>
             <Grid item xs={6} className={classes.item}>
@@ -44,11 +53,25 @@ const SortingForm = ({shuffleHeights, numBars, setNumBars, timeoutLength, setTim
                     <MenuItem value={'Merge Sort'}>Merge Sort</MenuItem>
                 </Select>
             </Grid>
-            <Grid item xs={6}>
-                <TextField label='Speed' value={timeoutLength} onChange={(event)=> setTimeoutLength(event.target.value)} className={classes.input}/>
+            <Grid item xs={6} className={classes.item}>
+                <h4>Speed</h4>
+                <Slider
+                    value={100 - timeoutLength}
+                    onChange={handleSpeedChange}
+                    valueLabelDisplay="auto"
+                    aria-labelledby="speed-slider"
+                    min={0}
+                    max={100}
+                    className={classes.slider}
+                />
             </Grid>
             <Grid item xs={6}>
-                <TextField label='Num Bars' value={numBars} onChange={(event) => setNumBars(event.target.value)} className={classes.input}/>
+                <TextField
+                    label='Num Bars'
+                    value={numBars}
+                    onChange={(event) => setNumBars(event.target.value <= 50 ? event.target.value : numBars)}
+                    className={classes.input}
+                />
             </Grid>
             <Grid item xs={6}>
                 <Button onClick={shuffleHeights} className={classes.button} disabled={isSorting}>Shuffle</Button>

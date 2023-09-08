@@ -17,6 +17,7 @@ const useStyles = makeStyles(() => ({
 	paper: {
         alignItems: 'center',
         display: 'flex',
+        flexDirection: 'column',
         justifyContent: 'center',
         backgroundColor: theme.colors.primary.white,
         padding: 10,
@@ -27,11 +28,11 @@ const useStyles = makeStyles(() => ({
 const SortingVisualizer = () => {
     const classes = useStyles() 
 
-    const [numBars, setNumBars] = useState(40)
+    const [numBars, setNumBars] = useState(30)
     const [highlighted, setHighlighted] = useState([])
-    const [timeoutLength, setTimeoutLength] = useState(3)
+    const [timeoutLength, setTimeoutLength] = useState(50)
     const [heights, setHeights] = useState(shuffleArray(getArray(numBars, max, min)))
-    const [algorithm, setAlgorithm] = useState('Bubble Sort')
+    const [algorithm, setAlgorithm] = useState('Merge Sort')
     const [isSorting, setIsSorting] = useState(false)
     
     
@@ -65,13 +66,9 @@ const SortingVisualizer = () => {
 
     return (
         <Grid container>
-            <Grid item xs={8}>
+            <Grid item xs={12} md={4}>
                 <Paper className={classes.paper} elevation={5}>
-                    <Chart heights={heights} highlighted={highlighted} />
-                </Paper>
-            </Grid>
-            <Grid item xs={4}>
-                <Paper className={classes.paper} elevation={5}>
+                    <h3>Sorting Parameters</h3>
                     <SortingForm
                         shuffleHeights={shuffleHeights}
                         numBars={numBars}
@@ -84,6 +81,11 @@ const SortingVisualizer = () => {
                         sort={sort}
                         isSorting={isSorting}
                     />
+                </Paper>
+            </Grid>
+            <Grid item xs={12} md={8}>
+                <Paper className={classes.paper} elevation={5}>
+                    <Chart heights={heights} highlighted={highlighted} />
                 </Paper>
             </Grid>
         </Grid>

@@ -9,7 +9,7 @@ const useStyles = makeStyles(() => ({
     backgroundColor: 'white',
     border: '1px solid #ddd',
     cursor: 'pointer',
-    borderRadius: '10px',
+    borderRadius: '7px',
   },
   wall: {
     backgroundColor: '#333',
@@ -25,7 +25,13 @@ const useStyles = makeStyles(() => ({
   },
   path: {
     backgroundColor: theme.colors.tertiary.main
-  }
+  },
+  '@media (max-width: 768px)': {
+    cell: {
+      width: '20px', // Adjust the width for small screens
+      height: '20px', // Adjust the height for small screens
+    },
+  },
 }))
 
 const Cell = ({ onClick, type }) => {

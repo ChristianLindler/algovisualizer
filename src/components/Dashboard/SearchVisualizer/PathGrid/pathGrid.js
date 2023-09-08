@@ -4,8 +4,6 @@ import { makeStyles } from '@material-ui/core'
 import { bfs } from '../searchAlgos'
 import { initialGrid } from '../searchVisualizer'
 
-
-
 const useStyles = makeStyles(() => ({
   gridContainer: {
     display: 'flex',
@@ -13,19 +11,25 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const PathGrid = ({grid, setGrid, startCell, endCell}) => {
+const PathGrid = ({grid, setGrid, startPos, endPos}) => {
   const classes = useStyles()
 
   const handleCellClick = (row, col) => {
-    const newGrid = [...grid]
-    const cellType = newGrid[row][col]
-
-    if (cellType === 'cell') {
-      newGrid[row][col] = 'wall'
-    } else if (cellType === 'wall') {
-      newGrid[row][col] = 'cell'
-    }
-
+    const newGrid = grid.map((rowArr, rowIndex) => {
+      return rowArr.map((cell, colIndex) => {
+        if (rowIndex === row && colIndex === col) {
+          const updatedCell = { ...cell }
+          if (updatedCell.type === 'cell') {
+            updatedCell.type = 'wall'
+          } else if (updatedCell.type === 'wall') {
+            updatedCell.type = 'cell'
+          }
+          return updatedCell
+        }
+        return cell
+      })
+    })
+  
     setGrid(newGrid)
   }
 
@@ -36,7 +40,7 @@ const PathGrid = ({grid, setGrid, startCell, endCell}) => {
           {row.map((cell, colIndex) => (
             <Cell
               key={colIndex}
-              type={grid[rowIndex][colIndex]}
+              type={grid[rowIndex][colIndex].type}
               onClick={() => handleCellClick(rowIndex, colIndex)}
             />
           ))}

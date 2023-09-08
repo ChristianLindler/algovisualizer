@@ -112,62 +112,63 @@ export const quickSort = async (
 }
 
 const merge = async (array, left, middle, right, setArray, setHighlighted, timeoutLength) => {
-  const leftSize = middle - left + 1;
-  const rightSize = right - middle;
+  const leftSize = middle - left + 1
+  const rightSize = right - middle
 
-  const leftArray = [];
-  const rightArray = [];
+  const leftArray = []
+  const rightArray = []
 
   for (let i = 0; i < leftSize; i++) {
-    leftArray[i] = array[left + i];
+    leftArray[i] = array[left + i]
   }
 
   for (let i = 0; i < rightSize; i++) {
-    rightArray[i] = array[middle + 1 + i];
+    rightArray[i] = array[middle + 1 + i]
   }
 
-  let i = 0;
-  let j = 0;
-  let k = left;
+  let i = 0
+  let j = 0
+  let k = left
 
   while (i < leftSize && j < rightSize) {
-    setHighlighted([left + i, middle + 1 + j]);
-    await new Promise((resolve) => setTimeout(resolve, timeoutLength));
+    setHighlighted([left + i, middle + 1 + j])
+    await new Promise((resolve) => setTimeout(resolve, timeoutLength))
 
     if (leftArray[i] <= rightArray[j]) {
-      array[k] = leftArray[i];
-      i++;
+      array[k] = leftArray[i]
+      i++
     } else {
-      array[k] = rightArray[j];
-      j++;
+      array[k] = rightArray[j]
+      j++
     }
 
-    setArray([...array]);
-    await new Promise((resolve) => setTimeout(resolve, timeoutLength));
-    setHighlighted([]);
-    k++;
+    k++
   }
 
   while (i < leftSize) {
-    array[k] = leftArray[i];
-    i++;
-    k++;
+    array[k] = leftArray[i]
+    i++
+    k++
   }
 
   while (j < rightSize) {
-    array[k] = rightArray[j];
-    j++;
-    k++;
+    array[k] = rightArray[j]
+    j++
+    k++
   }
-};
+
+  // Clear highlighted elements after the merge is complete
+  setHighlighted([])
+  setArray([...array])
+}
 
 export const mergeSort = async (array, left, right, setArray, setHighlighted, timeoutLength) => {
   if (left < right) {
-    const middle = Math.floor((left + right) / 2);
+    const middle = Math.floor((left + right) / 2)
 
-    await mergeSort(array, left, middle, setArray, setHighlighted, timeoutLength);
-    await mergeSort(array, middle + 1, right, setArray, setHighlighted, timeoutLength);
+    await mergeSort(array, left, middle, setArray, setHighlighted, timeoutLength)
+    await mergeSort(array, middle + 1, right, setArray, setHighlighted, timeoutLength)
 
-    await merge(array, left, middle, right, setArray, setHighlighted, timeoutLength);
+    await merge(array, left, middle, right, setArray, setHighlighted, timeoutLength)
   }
-};
+}
